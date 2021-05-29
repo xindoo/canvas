@@ -7,12 +7,12 @@
 </head>
 
 <body>
-    <canvas id="myCanvas" width="3000" height="3000"></canvas>
+    <canvas id="myCanvas" width="3100" height="3100"></canvas>
     <script>　　　　　//瓦片地图编辑器获取到的数据
         var n = 300;
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
-        var w = 5;
+        var w = 10;
         var s = 0;  // 起点格
         var e = n * n - 1 // 终点格
         function init() {
@@ -61,52 +61,54 @@
         for (var i = 0; i < n; i++) {
             for (var j = 0; j < n; j++) {
                 var num = i * n + j
-                edges.push(String(num + "_" + 0)); // 右
-                edges.push(String(num + "_" + 1)); // 下
+                if (j != n - 1) {
+                    edges.push(String(num + "_" + 0)); // 右
+                }
+                if (i != n - 1) {
+                    edges.push(String(num + "_" + 1)); // 下
+                }
             }
         }
         var cnt = 0
+        var ecnt = 0
         while (father(s) != father(e)) {
             var pos = Math.floor(Math.random() * edges.length); // 随机选一个格 
-            var edge = edges[pos]
-            console.log(pos, edges.length)
-            var two = get(edge)
-            if (father(two[0]) == father(two[1])) {
-                cnt++
+            if (edges[pos] == "x") {
+                cnt++;
             } else {
-                cnt = 0
-                fa[father(two[0])] = father(two[1]) // 联通两个块
-                ctx.fillStyle = "#FFFFFF";
-                var x = Math.floor(two[0] / n)
-                var y = two[0] % n
-                if (edge.split('_')[1] == '0' && y != n - 1) {
-                    ctx.fillRect((y + 1) * w, x * w + 2, 2, w - 2) // right
-                }
-                if (edge.split('_')[1] == '1' && x != n - 1) {
-                    ctx.fillRect(y * w + 2, (x + 1) * w, w - 2, 2) // down
-                }
-            }
-            if (cnt >= n / 3) {
-                cnt = 0
-            } else {
-                continue
-            }
-            edges = new Array()  // 重新生成边
-            for (var i = 0; i < n; i++) {
-                for (var j = 0; j < n; j++) {
-                    var num = i * n + j
-                    if (father(num) != father(num + 1) && j != n - 1) {
-                        edges.push(String(num + "_" + 0)); // 右
+                var edge = edges[pos]
+                ecnt++
+                var two = get(edge)
+                if (father(two[0]) == father(two[1])) {
+                    cnt++
+                } else {
+                    fa[father(two[0])] = father(two[1]) // 联通两个块
+                    ctx.fillStyle = "#FFFFFF";
+                    var x = Math.floor(two[0] / n)
+                    var y = two[0] % n
+                    if (edge.split('_')[1] == '0' && y != n - 1) {
+                        ctx.fillRect((y + 1) * w, x * w + 2, 2, w - 2) // right
                     }
-                    if (father(num) != father(num + n) && i != n - 1) {
-                        edges.push(String(num + "_" + 1)); // 下
+                    if (edge.split('_')[1] == '1' && x != n - 1) {
+                        ctx.fillRect(y * w + 2, (x + 1) * w, w - 2, 2) // down
+                    }
+                    edges[pos] = "x"
+                }
+            }
+
+            if (cnt >= edges.length / 5) {
+                cnt = 0
+                var tmpEdges = Array();
+                for (var i = 0; i < edges.length; i++) {
+                    if (edges[i] != "x") {
+                        tmpEdges.push(edges[i])
                     }
                 }
+                console.log("edges.length", edges.length)
+                edges = tmpEdges
             }
-            console.log(pos, x, y)
         }
-        console.log(s, father(s), e, father(e))
-        // alert("finished!!" + cnt )
+        alert("finished" + ecnt)
     </script>
 </body>
 
