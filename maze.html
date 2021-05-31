@@ -3,13 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>canvas绘制地图</title>
+    <title>canvas绘制迷宫</title>
 </head>
 
 <body>
     <canvas id="myCanvas" width="3100" height="3100"></canvas>
     <script>　　　　　//瓦片地图编辑器获取到的数据
-        var n = 300;
+        var n = 30;
         var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
         var w = 10;
@@ -108,7 +108,7 @@
                 edges = tmpEdges
             }
         }
-        alert("finished" + ecnt)
+        // alert("finished" + ecnt)
     </script>
 </body>
 
